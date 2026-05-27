@@ -2,7 +2,7 @@
 // TC-004 to TC-011 – Personal Information Form
 
 import { test, expect } from '@playwright/test';
-import { FakeData, fillField, clickContinue } from '../utils/test-helpers';
+import { FakeData, fillField, clickContinue } from './test-helpers';
 import * as path from 'path';
 
 const BASE = process.env.BASE_URL || 'https://your-midchain-app.com';
@@ -43,12 +43,12 @@ test.describe('Step 2 – Personal Information', () => {
 
     const fileInput = page.locator('input[type="file"]').first();
     if (await fileInput.isVisible().catch(() => false)) {
-      await fileInput.setInputFiles(path.join(__dirname, '../fixtures/test-image.jpg'));
+      await fileInput.setInputFiles(path.join(__dirname, './fixtures/test-image.jpg'));
     } else {
       // Click upload trigger, then handle
       await page.locator('[data-testid="upload-image"], .upload-area, label[for*="image"]').first().click();
       await page.locator('input[type="file"]').first().setInputFiles(
-        path.join(__dirname, '../fixtures/test-image.jpg')
+        path.join(__dirname, './fixtures/test-image.jpg')
       );
     }
     await page.waitForTimeout(1000);
@@ -58,10 +58,10 @@ test.describe('Step 2 – Personal Information', () => {
   test('TC-005: Upload profile image – PNG', async ({ page }) => {
     await loginAndReachStep2(page);
     const fileInput = page.locator('input[type="file"]').first();
-    await fileInput.setInputFiles(path.join(__dirname, '../fixtures/test-image.png')).catch(async () => {
+    await fileInput.setInputFiles(path.join(__dirname, './fixtures/test-image.png')).catch(async () => {
       await page.locator('.upload-area, [data-testid="upload-image"]').first().click();
       await page.locator('input[type="file"]').first().setInputFiles(
-        path.join(__dirname, '../fixtures/test-image.png')
+        path.join(__dirname, './fixtures/test-image.png')
       );
     });
     await page.waitForTimeout(1000);
@@ -71,7 +71,7 @@ test.describe('Step 2 – Personal Information', () => {
   test('TC-006: Upload profile image – PDF (format check)', async ({ page }) => {
     await loginAndReachStep2(page);
     const fileInput = page.locator('input[type="file"]').first();
-    await fileInput.setInputFiles(path.join(__dirname, '../fixtures/test-doc.pdf')).catch(() => {});
+    await fileInput.setInputFiles(path.join(__dirname, './fixtures/test-doc.pdf')).catch(() => {});
     await page.waitForTimeout(1000);
     console.log('TC-006: PDF upload attempted – check if error or success is expected');
   });
@@ -79,7 +79,7 @@ test.describe('Step 2 – Personal Information', () => {
   test('TC-007: Upload image >10MB (size validation)', async ({ page }) => {
     await loginAndReachStep2(page);
     const fileInput = page.locator('input[type="file"]').first();
-    await fileInput.setInputFiles(path.join(__dirname, '../fixtures/large-file.jpg')).catch(() => {});
+    await fileInput.setInputFiles(path.join(__dirname, './fixtures/large-file.jpg')).catch(() => {});
     await page.waitForTimeout(1500);
 
     const errMsg = page.locator('text=/size|too large|10mb/i, .error, .file-error').first();
